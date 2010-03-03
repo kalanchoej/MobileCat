@@ -7,7 +7,7 @@ class SiteParse extends IIIParse {
     public $catalog_url = "http://www.example.com/";
     public $base_url    = "http://m.example.com/";
 
-    public $catalog_name = "Library Catalog";
+    public $catalog_name = "Catalog";
     public $def_scope    = "1";
 
     public $email_from   = "library@example.com";
