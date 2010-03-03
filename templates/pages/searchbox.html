@@ -1,0 +1,12 @@
+    {if $js}
+        <form id="searchform" action="search">
+    {else}
+        <form id="searchform" action="search_nojs">
+    {/if}
+            
+            <input type="text" name="searcharg" id="searchbox" class="searchbox" value="{$searcharg|escape:'html'}">
+            <br><br>
+        
+            <input type="submit" value="Search" class="gobutton">
+        </form>
+

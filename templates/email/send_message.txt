@@ -1,0 +1,15 @@
+{foreach from=$r.locations item=loc}
+{foreach from=$loc item=l}
+{$l.location} {$l.call}
+{/foreach}
+{/foreach}
+
+{foreach from=$r.info_keys item=k}
+{$r.info[$k]}
+{/foreach}
+
+{strip}
+{if !$is_text}
+{$catalogurl}/record={$r.bibid}
+{/if}
+{/strip}

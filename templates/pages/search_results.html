@@ -1,0 +1,31 @@
+{foreach from=$results item=res}
+    <div class="bres" id="bres{$res.bibid}">
+        <a class="bhead invis" id="bhead{$res.bibid}" 
+            {if $js}
+                href="#"
+            {else} 
+                href="{$baseurl}detail?bibid={$res.bibid}"
+            {/if}
+        >
+                <table>
+                    <tr>
+                        <td class="cover_image">
+                            {if $res.cover_image}
+                                <img src="{$res.cover_image}">
+                            {/if}
+                        </td>
+                        <td valign="middle" width="100%">
+                            <span class="title">{$res.title}</span><br>
+                            <b>{$res.media}</b>
+                  
+                            {foreach from=$res.extra item=extra}
+                                {$extra}
+                            {/foreach}
+                        </td>
+                    </tr>
+                </table>
+            </a>
+                        
+        <div class="hide det" id="det{$res.bibid}"></div>
+    </div>
+{/foreach}
