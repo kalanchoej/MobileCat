@@ -266,12 +266,37 @@ class IIIParse {
         $num      = $this->find_num_results($html);
         $results  = $this->find_records($html);
 
-        $html->clear();
-        unset($html);
+        # This special case is when the OPAC goes directly to the bib
+        # record because there is only one result
+        if(($num == 0) && ($this->one_entry_found($html))) {
+            $rec = $this->get_record_from_html($html);
+        
+            $html->clear();
+            unset($html);
+            
+            return array(
+                "oneres"   => True,
+                "record"   => $rec,
+            );
 
-        return array($results, $navlinks['Prev'], $navlinks['Next'], $num);
+        # The normal case of multiple (or zero) results
+        } else {
 
+            $html->clear();
+            unset($html);
+
+            return array(
+                "oneres"   => False,
+                "results"  => $results, 
+                "navlinks" => $navlinks,
+                "num"      => $num,
+            );
+        }
     }
+
+    protected function one_entry_found($html) {
+        return $html->find("table.bibDetail");
+    }      
 
     protected function find_cover_image($isbn) {
         return $this->base_url . "/cover_image?isbn=$isbn";
@@ -417,12 +442,14 @@ class IIIParse {
 
         return join(' - ', $vals);
     }
-    
-    public function get_record($bibid) {
-        $html = file_get_dom(
-            $this->catalog_url . "/record=" . $bibid
-        );
 
+    protected function find_bibid($html) {
+        $anchor = $html->find('#recordnum', 0);
+        $bibid =  'b' . ending_digits($anchor->href);
+        return $bibid;
+    }
+
+    protected function get_record_from_html($html, $bibid=null) {
         # Basic info such as author, title, etc.
         $info = $this->find_bib_details($html);
         $info_all = $this->get_info_all($info);
@@ -448,6 +475,10 @@ class IIIParse {
             $img = $this->base_url . "static/nocover.jpg";
         }
 
+        if (!$bibid) {
+            $bibid = $this->find_bibid($html);
+        }
+
         return array(
             "info"        => $info, 
             "info_all"    => $info_all, 
@@ -458,6 +489,15 @@ class IIIParse {
             "bibid"       => $bibid,
             "request_url" => $request_url,
         );
+
+    }
+    
+    public function get_record($bibid) {
+        $html = file_get_dom(
+            $this->catalog_url . "/record=" . $bibid
+        );
+
+        return $this->get_record_from_html($html, $bibid);
     }
 
     public function get_next_browse($url) {

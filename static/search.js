@@ -28,7 +28,10 @@ function populate_results(json) {
     $("#morespinner").hide();
     $("#searchspinner").hide();
 
-    if (json.results.length > 0) {
+    if (json.oneres == true) {
+        $("#results").append(json['results_html']);
+
+    } else if (json.results.length > 0) {
         // Show the HTML for all results
         $("#results").append(json['results_html']);
 
@@ -52,9 +55,12 @@ function populate_results(json) {
     // If this is the first time the search is being run, and not just a "more"
     // click, then update the results header.
     if (json.searcharg) {
-        $("#resultshead").html(json.num + " results for <b>" + json.searcharg + "</b>");
+        if (json.num == 1) {
+            $("#resultshead").html(json.num + " result for <b>" + json.searcharg + "</b>");
+        } else {
+            $("#resultshead").html(json.num + " results for <b>" + json.searcharg + "</b>");
+        }
     }
-
 
     if (json.next) {
         MORE_LINK = json.next;
