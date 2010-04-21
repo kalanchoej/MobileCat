@@ -28,18 +28,6 @@
 
 
     <div class="clear">
-        <a class="button"
-            {if $js}
-                onclick="return load_to_iframe('{$baseurl}text_form?bibid={$r.bibid}', '{$r.bibid}');" 
-            {/if}
-            
-            {if $js}
-                href="#"
-            {else}
-                href="{$baseurl}text_form?bibid={$r.bibid}"
-            {/if}
-            ><span>Text</span></a>
-
         <a class="button" 
             {if $js}
                 onclick="return load_to_iframe('{$baseurl}email_form?bibid={$r.bibid}', '{$r.bibid}');" 
@@ -51,6 +39,18 @@
                 href="{$baseurl}email_form?bibid={$r.bibid}"
             {/if}
             ><span>Email</span></a>
+
+        <a class="button"
+            {if $js}
+                onclick="return load_to_iframe('{$baseurl}text_form?bibid={$r.bibid}', '{$r.bibid}');" 
+            {/if}
+            
+            {if $js}
+                href="#"
+            {else}
+                href="{$baseurl}text_form?bibid={$r.bibid}"
+            {/if}
+            ><span>Text</span></a>
 
         {if $r.request_url}
          <a class="button"
