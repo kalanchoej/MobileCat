@@ -1,6 +1,9 @@
 <?
     require_once("util.php");
 
+    # don't want nojs return-to-search navigation in saved list items.
+    clear_prev_search();
+
     $sm = get_smarty();
     $p = new SiteParse();
    

@@ -1,5 +1,6 @@
 <? 
 
+
     require_once("util.php");
     $sm = get_smarty();
 
@@ -13,6 +14,15 @@
             $sm->assign("num", $ret['num']);
             $sm->assign("results", $ret['results']);
 
+            # for nojs return-to-search navigation
+            $_SESSION['searcharg'] = $_REQUEST['searcharg'];
+            if(array_key_exists('url', $_REQUEST)) {
+                $results_url = urlencode($_REQUEST['url']);
+                $_SESSION['results_url'] = $results_url;
+            } else {
+                unset($_SESSION['results_url']);
+            }
+
             if (blank_search()) {
                 $sm->assign("blanksearch", true);
             }
@@ -20,6 +30,9 @@
             header("Content-Type: text/html; charset=utf-8");
             $sm->display('pages/search_nojs_main.html');
         } else {
+            clear_prev_search();
+
+            # present single record
             $record = $ret['record'];
 
             $p = new SiteParse();

@@ -45,6 +45,10 @@ function get_smarty() {
 
     $smarty->assign("mobile_domains", $p->mobile_domains);
 
+    # for nojs return-to-search navigation
+    $smarty->assign('search_arg', ar_get('searcharg', $_SESSION));
+    $smarty->assign('last_results', ar_get('results_url', $_SESSION));
+
     return $smarty;
 }
 
@@ -104,6 +108,11 @@ function do_logout() {
     unset($_SESSION['name']);
     unset($_SESSION['code']);
     unset($_SESSION['userid']);
+}
+
+function clear_prev_search() {
+    # for nojs return-to-search navigation
+    unset($_SESSION['searcharg'], $_SESSION['results_url']);
 }
 
 function blank_search() {

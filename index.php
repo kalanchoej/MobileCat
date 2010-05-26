@@ -1,6 +1,7 @@
 <? 
     require_once("util.php");
 
+    clear_prev_search();
     $sm = get_smarty();
 
     try {

@@ -77,7 +77,7 @@ class IIIParse {
         foreach ($anchors as $a) {
             foreach ($links_to_get as $key => $value) {
                 if ($a->innertext == $key) {
-                    $links_to_get[$key] = $this->catalog_url . $a->href;
+                    $links_to_get[$key] = $this->catalog_url . urldecode($a->href);
                 }
             }
         }

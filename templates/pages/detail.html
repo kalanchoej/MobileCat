@@ -24,8 +24,7 @@
             <a class="wide" href="{$link[0]}" target="_blank">{$link[1]}</a>
         {/foreach}
 
-    <a class="wide" href="{$catalogurl}/record={$r.bibid}" target="_blank">Full {$catalogname} record</a>
-
+    <a href="{$catalogurl}/record={$r.bibid}" target="_blank">Full {$catalogname} record</a>{include file="include/backlink_search.html"}
 
     <div class="clear">
         <a class="button" 

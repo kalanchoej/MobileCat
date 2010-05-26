@@ -27,6 +27,7 @@
             $sm->assign("locs", $resp["locs"]);
             $sm->assign("hidden", $resp["hidden"]);
             $sm->assign("url", $req_url);
+            $sm->assign("bibid", ar_get('bibid', $_REQUEST));
 
             $sm->display("forms/request_form_step2.html");
         }

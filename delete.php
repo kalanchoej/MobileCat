@@ -4,7 +4,7 @@
     $sm = get_smarty();
 
     try {
-        $bibid = ar_get("bibid", $_REQUEST);
+        $bibid = ar_get('bibid', $_REQUEST);
 
         if ($bibid == "all") {
             unset($_SESSION['saved']);

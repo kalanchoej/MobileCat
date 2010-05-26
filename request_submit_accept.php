@@ -9,6 +9,7 @@
             throw new Exception("Please log into your account.");
 
         } else {
+            $sm->assign("bibid", ar_get('bibid', $_REQUEST));
             $name = $_SESSION['name'];
             $code = $_SESSION['code'];
 
