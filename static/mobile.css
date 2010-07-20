@@ -13,7 +13,7 @@ body,td,p {
 
 .searchbox {
     margin-top: 5px;
-    width: 100%;
+    width: 97%;
     font-size: 30px;
 }
 
@@ -21,15 +21,14 @@ body,td,p {
     color: #bbb;
 }
 
-input.login {
-    font-size: 30px;
-    width: 100%;
+input {
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
-input.loginbut {
-    margin-top: 5px;
+input.login {
     font-size: 30px;
-    width: 100%;
+    width: 97%;
 }
 
 .title {
@@ -39,7 +38,7 @@ input.loginbut {
 
 .gobutton {
     font-size: 30px;
-    width: 100%;
+    width: 97%;
 }
 
 .morebutton {
