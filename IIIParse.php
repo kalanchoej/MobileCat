@@ -104,13 +104,21 @@ class IIIParse {
         }
         
         $info['media'] = $this->translate_material(($spans[2]->first_child()->alt));
-        $info['bibid'] = $spans[3]->first_child()->value;
-        
+        #bibid  
+	    if($bibid = $this->scrape_bibid($row->innertext)) {		#what makes a valid bibid, anyway?
+                $info['bibid'] = $bibid;
+        }
+
         # Everything after that is included in its own "extra" array
         $info['extra'] = array_map("ptext", array_slice($spans, 4));
 
         return $info;
     }
+
+    protected function scrape_bibid($rawhtml) {
+            preg_match('/b[\d]{6,}/', $rawhtml, $match);
+            return $match[0];
+    } 
         
     protected function find_records($html) {
         $rows = $html->find("span.mobileinfo");
@@ -270,6 +278,8 @@ class IIIParse {
         # record because there is only one result
         if(($num == 0) && ($this->one_entry_found($html))) {
             $rec = $this->get_record_from_html($html);
+        
+            $rec['bibid'] = $this->scrape_bibid($html);
         
             $html->clear();
             unset($html);
