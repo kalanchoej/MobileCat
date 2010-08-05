@@ -1,5 +1,6 @@
 <?
     require_once('SiteParse.php');
+    $settings = new SiteParse();
 
     $isbn = $_REQUEST['isbn'];
 
@@ -9,18 +10,18 @@
     header("Cache-Control: max-age=31536000, public");
     
     try {
-        if (SiteParse::$cover_image_type == "syndetics") {
-            $client = SiteParse::$syndetics_client;
+        if ($settings->cover_image_type == "syndetics") {
+            $client = $settings->cover_userid;
             $url = "http://www.syndetics.com/index.php?isbn=$isbn/sc.gif&client=$client";
-        } elseif (SiteParse::$cover_image_type == "openlibrary") {
+        } elseif ($settings->cover_image_type == "openlibrary") {
             $url = "http://covers.openlibrary.org/b/isbn/$isbn-S.jpg";  #api documentation is wrong; this returns a redirect that must be parsed
             $resp = http_parse_message(http_get($url));
             $url = $resp->headers['Location'];
-        } elseif (SiteParse::$cover_image_type == "contentcafe") {
-            $user = SiteParse::$cc_user;
-            $pass =  SiteParse::$cc_pass;
+        } elseif ($settings->cover_image_type == "contentcafe") {
+            $user = $settings->cover_userid;
+            $pass =  $settings->cover_pass;
             $url = "http://images.btol.com/ContentCafe/Jacket.aspx?UserID=$user&Password=$pass&Return=1&Type=S&Value=$isbn&erroroverride=1&";
-        } elseif (SiteParse::$cover_image_type == "googlebooks") {	
+        } elseif ($settings->cover_image_type == "googlebooks") {	
 	        $url = "http://books.google.com/books?jscmd=viewapi&bibkeys=$isbn&callback=ProcessGBSBookInfo"; 
 	        $resp = http_parse_message(http_get($url));
 	   
@@ -40,7 +41,7 @@
             throw new Exception("No image type configured.");
         }
 
-        $image = imagecreatefromstring($resp->body);
+        $image = imagecreatefromstring($resp->body);        #if i recall, fires off warnings sometimes; breaks covers/ajax calls
         if (imagesx($image) > 1) {
             header(sprintf("Content-Type: %s", $resp->headers['Content-Type']));
 	        $matches = preg_split('/(\<!DOCTYPE|\<html)/', $resp->body);	#strip excess html returned in the body of the request (contentcafe)
