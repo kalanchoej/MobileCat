@@ -146,6 +146,8 @@ function use_js() {
             $USE_JS = false;
         } else if (preg_match('/AppleWebKit/', $user)) {
             $USE_JS = true;
+        } else if (preg_match('/Gecko/', $user)) {  # firefox
+            $USE_JS = true;
         } else {
             $USE_JS = false;
         }
