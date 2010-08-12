@@ -15,7 +15,7 @@
 
                     <td valign="middle" width="100%">
                         <span class="title">{$i.title}</span><br>
-                        {$i.status}
+                        <span {if $i.overdue}class="overdue"{/if}>{$i.status}</span>
                     </td>
                 </tr>
             </table>

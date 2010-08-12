@@ -312,6 +312,18 @@ class IIIParse {
         return $this->base_url . "/cover_image?isbn=$isbn";
     }
 
+    protected function is_overdue($status) {
+        # due date status looks like "due mm-dd-yy"
+        if ('due ' == substr($status, 0, 4)) {
+            $ddate = substr($status, 10, 2) . substr($status, 4, 2) . substr($status, 7, 2);
+            $today = date('y').date('m').date('d');
+            if ($ddate - $today < 0) {
+                return true; 
+            }
+        }
+        return false;
+    }
+
     protected function find_checked_out_items($userid, $html) {
         $items = array();
         $rows = $html->find(".patFuncEntry");
@@ -333,7 +345,8 @@ class IIIParse {
 
             $item['barcode'] = ptext($cols[2]);
             # use innertext to preserve the html colors of status
-            $item['status']  = strtolower($cols[3]->innertext);
+            $item['status']  = trim(strtolower($cols[3]->innertext));
+            $item['overdue'] = $this->is_overdue($item['status']);
             $item['call']    = ptext($cols[4]);
 
             $query = http_build_query(array(
@@ -434,6 +447,7 @@ class IIIParse {
         # title
         # barcode
         # status
+        # overdue (bool)
         # call
 
         $items = $this->find_checked_out_items($userid, $html);

@@ -21,7 +21,7 @@ class SiteParse extends IIIParse {
     #public $cover_image_type = "googlebooks"; 
     #public $cover_image_type = "syndetics";
     
-    public $cover_userid = "";                                                                
+    public $cover_userid = ""; 
     public $cover_pass = "";
 
 
