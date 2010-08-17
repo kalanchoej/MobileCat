@@ -72,13 +72,17 @@ class IIIParse {
             'Next' => '',
             'Prev' => '',
         );
-        
+
+        #find links for more results
         $anchors = $html->find("td.browsePager a");
-        foreach ($anchors as $a) {
-            foreach ($links_to_get as $key => $value) {
-                if ($a->innertext == $key) {
-                    $links_to_get[$key] = $this->catalog_url . urldecode($a->href);
-                }
+
+        if($anchors) {
+            #if first or last are non-numeric (text or an image), then they must(?) be prev/next links
+            if(!is_numeric($anchors[0]->innertext)) { 
+                $links_to_get['Prev'] = $this->catalog_url . urldecode($anchors[0]->href);
+            }
+            if(!is_numeric(end($anchors)->innertext)) {
+                $links_to_get['Next'] = $this->catalog_url . urldecode(end($anchors)->href);
             }
         }
 
@@ -97,12 +101,11 @@ class IIIParse {
         $info['title'] = ptext($spans[0]);
         
         $info['isbn'] = starting_digits(ptext($spans[1]));
-        if ($info['isbn']) {
-            $info['cover_image'] = $this->find_cover_image($info['isbn']);
-        } else {
-            $info['cover_image'] = $this->base_url . "static/nocover.jpg";
-        }
-        
+
+        #cover_image
+        $info['cover_image'] = 'static/nocover.jpg'; 
+        if($info['isbn']) $info['cover_image'] = $this->find_cover_image($info['isbn']);
+
         $info['media'] = $this->translate_material(($spans[2]->first_child()->alt));
         #bibid  
 	    if($bibid = $this->scrape_bibid($row->innertext)) {		#what makes a valid bibid, anyway?
@@ -118,8 +121,8 @@ class IIIParse {
     protected function scrape_bibid($rawhtml) {
             preg_match('/b[\d]{6,}/', $rawhtml, $match);
             return $match[0];
-    } 
-        
+    }
+
     protected function find_records($html) {
         $rows = $html->find("span.mobileinfo");
 
@@ -132,8 +135,7 @@ class IIIParse {
 
         return $records;
     }
-            
-            
+
     protected function shorten_value($val, $extra="") {
         // Short circuit when this is undefined
         if ($this->max_value_length == null) {
@@ -165,7 +167,7 @@ class IIIParse {
         # Get all details from first table
         foreach ($tds as $td) {
             $label = trim($td->innertext);
-            $str = $td->next_sibling()->find("text");
+            $str = $td->next_sibling()->find("text");       # gather text from .bibInfoData
             
             $str_text = Array();
             foreach ($str as $value) {
@@ -278,7 +280,7 @@ class IIIParse {
         # record because there is only one result
         if(($num == 0) && ($this->one_entry_found($html))) {
             $rec = $this->get_record_from_html($html);
-        
+
             $rec['bibid'] = $this->scrape_bibid($html);
         
             $html->clear();
@@ -403,6 +405,7 @@ class IIIParse {
             "code" => $code,
         ));
 
+        #this doesn't work on catalogs that use a secure connection when accessing patron accounts; using https:// in $catalog_url solves this(?) at least for Albert
         $login_url = $this->catalog_url . "/patroninfo/?$query";
 
         $resp = http_parse_message(http_get($login_url));
@@ -455,7 +458,7 @@ class IIIParse {
         return $items;
     }
     
-    # Return all info key values in one dash-delimited string
+    # Return all values defined in $detail_keys (above) in one dash-delimited string
     protected function get_info_all($info) {
         $vals = array();
         foreach ($this->detail_keys as $key) {
@@ -496,7 +499,7 @@ class IIIParse {
         if (($isbn = starting_digits(ar_get('ISBN', $info)))) {
             $img = $this->find_cover_image($isbn);
         } else {
-            $img = $this->base_url . "static/nocover.jpg";
+            $img = $this->base_url . "static/nocover.jpg";  #is this conditional redundant now? worth hunting to find out?
         }
 
         if (!$bibid) {
