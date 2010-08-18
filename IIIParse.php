@@ -118,19 +118,82 @@ class IIIParse {
         return $info;
     }
 
+    protected function scrape_record($row) {
+        $info = array();
+
+        #title
+        $info['title'] = $row->find('span.briefcitTitle a', 0)->plaintext;
+
+        # grab author and publisher... (not standard on all catalogs?)
+        $citDetail = preg_split('/\n/', $row->find('td.briefcitDetail', 0)->plaintext, NULL, PREG_SPLIT_NO_EMPTY);
+        if($citDetail[1]) $info['author'] = $citDetail[1];
+        if($citDetail[2]) $info['publisher'] = $citDetail[2];
+        
+	    #search text in the row for (the first instance of) a valid isbn
+    	if(preg_match('/[\dXx]{10,13}/', $row->innertext, $potential_isbns)) {
+	    	$info['isbn'] = $potential_isbns[0];
+    	}
+
+        #cover_image
+        $info['cover_image'] = 'static/nocover.jpg'; 
+        if($info['isbn']) $info['cover_image'] = $this->find_cover_image($info['isbn']);
+        
+        #bibid  
+	    if($bibid = $this->scrape_bibid($row->innertext)) {		#what makes a valid bibid, anyway?
+                $info['bibid'] = $bibid;
+        }
+        else return NULL;  # can't do much without a bibid 
+
+	    #how well do the below work on other catalogs?
+ 
+        #extra
+        $bibitems = $row->find('tr.bibItemsEntry td');
+        
+        #location
+        $info['location'] = $this->xtrim($bibitems[0]->plaintext);
+        
+        #callno
+        $info['callno'] = $this->xtrim($bibitems[1]->plaintext);
+        
+        #status
+        $info['status'] = $this->xtrim($bibitems[2]->plaintext); 
+
+        $row->clear();
+        unset($row);
+
+
+        return $info;
+    }
+
+	protected function xtrim($text) {
+        return trim(str_replace('&nbsp;', '', $text));
+    }
+
     protected function scrape_bibid($rawhtml) {
             preg_match('/b[\d]{6,}/', $rawhtml, $match);
             return $match[0];
     }
 
+
     protected function find_records($html) {
-        $rows = $html->find("span.mobileinfo");
+        $method = $this->method_type;
 
         # An array of arrays to hold the parsed info
         $records = array();
 
-        foreach ($rows as $row) {
-            array_push($records, $this->parse_record($row));
+        if($method == 'mobileinfo') {
+            $rows = $html->find("span.mobileinfo");
+            foreach ($rows as $row) array_push($records, $this->parse_record($row));
+        }
+        elseif($method == 'scrape') {
+            #todo find out why there are two calls to scrape_record() in this conditional
+                # 02aug10: under construction
+                if($rows = $html->find(".briefCitRow")) {   # how many different row types are there? BPL='.briefcitResultInfo'
+                    foreach ($rows as $row) array_push($records, $this->scrape_record($row));
+                }              
+                elseif($rows = $html->find(".briefcitResultInfo")) {
+                    foreach ($rows as $row) array_push($records, $this->scrape_record($row));
+                }
         }
 
         return $records;
@@ -158,7 +221,8 @@ class IIIParse {
             return $val;
         }
     }
-
+        
+    # gathers bib info from individual record, names the array item after each td.bibInfoLabel and the data with the next cell in the row (.bibInfoData)
     protected function find_bib_details($html) {
         $info = array();
 
