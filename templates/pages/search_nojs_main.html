@@ -26,11 +26,11 @@
     <div class="nojsformpad">
         <div class="clear">
             {if $prev}
-                <a class="button" href="{$baseurl}search_nojs?searcharg={$searcharg|escape:'url'}&url={$prev|escape:'url'}"><span>&lt;&lt;Previous</span></a>
+                <a class="button" href="{$baseurl}search_nojs?searcharg={$searcharg|escape:'url'}&url={$prev|escape:'url'}{if $scope}&scope={$scope}{/if}"><span>&lt;&lt;Previous</span></a>
             {/if}
 
             {if $next}
-                <a class="button" href="{$baseurl}search_nojs?searcharg={$searcharg|escape:'url'}&url={$next|escape:'url'}"><span>Next&gt;&gt;</span></a>
+                <a class="button" href="{$baseurl}search_nojs?searcharg={$searcharg|escape:'url'}&url={$next|escape:'url'}{if $scope}&scope={$scope}{/if}"><span>Next&gt;&gt;</span></a>
             {else}
                 <div class="smallhead">
                     End of results.

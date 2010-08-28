@@ -2,6 +2,7 @@
 
 <div class="basicpad">
     <input type="hidden" name="searcharg" id="searcharg" value="{$searcharg|escape:'html'}">
+    <input type="hidden" name="scope" id="scope" value="{$scope}">
     
     {include file="pages/searchbox.html"}
 
@@ -12,7 +13,7 @@
     {else}
         <div id="resultshead">
             <div>Getting results for <b>{$searcharg|escape:'html'}</b>...</div>
-            <img src="static/spinner.gif" id="searchspinner">
+            <img src="static/spinner.gif" id="searchspinner" alt="spinner" />
         </div>
     {/if}
 </div>

@@ -3,6 +3,8 @@
 require_once('SiteParse.php');
 require_once('Smarty/Smarty.class.php');
 
+error_reporting(E_ERROR);
+
 function ar_get($key, $array) {
     if (array_key_exists($key, $array)) {
         return $array[$key];
@@ -21,6 +23,9 @@ function get_smarty() {
     $smarty->assign("catalogname", $p->catalog_name);
     $smarty->assign("catalogurl", $p->catalog_url);
     $smarty->assign("feedback_email", $p->feedback_email);
+    $smarty->assign("scoping", $p->scoping);
+    $smarty->assign("scopes", $p->scopes);
+    $smarty->assign("def_scope", $p->def_scope);
 
     # Last email address used to send a record
     $smarty->assign('saved_email',  ar_get('email', $_SESSION));
@@ -100,7 +105,7 @@ function get_browse_results() {
     
     # For a normal search link, just use the search arg
     } else {
-        return $p->get_browse($_REQUEST['searcharg']);
+        return $p->get_browse($_REQUEST['searcharg'], $_REQUEST['scope']);
     }
 }
 
@@ -144,9 +149,11 @@ function use_js() {
             $USE_JS = true;
         } else if (isset($_SESSION['forcejs']) and ($_SESSION['forcejs'] == 0)) {
             $USE_JS = false;
-        } else if (preg_match('/AppleWebKit/', $user)) {
+        } else if (preg_match('/AppleWebKit/', $user)) {    # safari and chrome
             $USE_JS = true;
         } else if (preg_match('/Gecko/', $user)) {  # firefox
+            $USE_JS = true;
+        } else if (preg_match('/webOS/', $user)) {  # palm webos
             $USE_JS = true;
         } else {
             $USE_JS = false;

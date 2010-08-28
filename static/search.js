@@ -13,13 +13,12 @@ function create_show_details(bibid) {
        
         $.getJSON("record", { "bibid" : bibid },
             function (json) {
-                $("#det" + bibid).append(json['record_html']);
+	        $("#det" + bibid).append(json['record_html']);
                 $("#det" + bibid).show();
                 
                 return false;
         });
-
-        return false;
+	return false;
     }
 }
 
@@ -80,7 +79,8 @@ function get_initial_results() {
     $("#more").hide();
     
     $.getJSON("browse", {
-            "searcharg" : $("#searcharg").val() 
+            "searcharg" : $("#searcharg").val(),
+            "scope" : $("#scope").val()
         },
         populate_results
     );

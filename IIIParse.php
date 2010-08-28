@@ -2,7 +2,7 @@
 
 require_once('simple_html_dom.php');
 
-ini_set("memory_limit", "30M");
+ini_set("memory_limit", "40M");
 
 class IIIParse {
 
@@ -14,7 +14,7 @@ class IIIParse {
     public $email_from    = null;
 
     public $catalog_name  = "DefaultCatalog";
-    public $def_scope     = "1";
+    public $def_scope     = "0";
     public $def_type      = "X";
 
     public $feedback_email = "feedback@example.com";
@@ -53,7 +53,7 @@ class IIIParse {
         ));
         
        
-        $url = $this->catalog_url . '/search/?' . $query;
+        $url = $this->catalog_url . '/search/?' . $query . '&SORT=R';   # added SORT=R bit; sorts relevancy with albert. with others too?
 
         return $url;
     }
@@ -174,6 +174,48 @@ class IIIParse {
             return $match[0];
     }
 
+	# returns set of arrays with [name] and [value] for each scope
+	function find_scopes($url) {
+
+		try {
+			# get page 
+		    $html = file_get_dom($url);
+
+			# gather <option> elements within <select [name|id="searchscope"]
+		    $options = $html->find("select[name='searchscope'] option");
+
+			$scopes = array();
+	        $default_scope = 0;
+
+		    # iterate over <option>'s
+			foreach($options as $option) {
+
+				# assign innertext to scope array
+
+	            array("name" => trim($option->innertext), "value" => $option->value);
+
+	            array_push($scopes, array("name" => utf8_decode(trim($option->innertext)), "value" => $option->value));
+
+				# is it default scope?
+            
+
+		        if($option->selected == "selected") {
+					#assign to def_scope
+
+		            $default_scope = $option->value;
+		        }
+		    }		
+	    
+	        array_push($scopes, $default_scope);
+
+			return $scopes; //$def_scope;
+
+		} catch (exception $e) {
+			# error; you must assign scopes manually
+	        echo "exception $e";
+		}
+
+	}    
 
     protected function find_records($html) {
         $method = $this->method_type;
@@ -375,7 +417,7 @@ class IIIParse {
     }      
 
     protected function find_cover_image($isbn) {
-        return $this->base_url . "/cover_image?isbn=$isbn";
+        return $this->base_url . "cover_image?isbn=$isbn";
     }
 
     protected function is_overdue($status) {

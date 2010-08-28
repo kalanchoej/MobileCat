@@ -37,17 +37,12 @@
 	
         if ($url) {
             $resp = http_parse_message(http_get($url));
-        } else {
-            throw new Exception("No image type configured.");
-        }
-
-        $image = imagecreatefromstring($resp->body);        #if i recall, fires off warnings sometimes; breaks covers/ajax calls
-        if (imagesx($image) > 1) {
+            
             header(sprintf("Content-Type: %s", $resp->headers['Content-Type']));
 	        $matches = preg_split('/(\<!DOCTYPE|\<html)/', $resp->body);	#strip excess html returned in the body of the request (contentcafe)
 	        echo $matches[0];
         } else {
-            throw new Exception("Image not found.");
+            throw new Exception("No image available.");
         }
 
     // For any exception, return a blank image
