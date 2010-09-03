@@ -1,0 +1,135 @@
+<html>
+<head></head>
+<body>
+<p>
+<strong>MobileCat configuration:</strong><br />
+<em>Please submit administrator password when submitting form.</em>
+</p>
+
+{if $error}
+<p style="color: red;">ERROR: {$error}</p>
+{/if}
+
+<form method="POST" action="config_submit.php">
+<table border="0" class="settings_table">
+<tbody>
+
+<tr>
+<td align="right">Catalog Name</td>
+<td>
+<input maxlength="60" size="60" value="{$catalog_name}" name="catalog_name">
+</td>
+</tr>
+
+<tr>
+<td align="right">Catalog URL</td>
+<td>
+<input maxlength="60" size="60" value="{$catalog_url}" name="catalog_url">
+</td>
+</tr>
+
+<tr>
+<td align="right">Mobile catalog URL</td>
+<td>
+<input maxlength="60" size="60" value="{$base_url}" name="base_url">
+</td>
+</tr>
+
+<tr><td>&nbsp;</td></tr>
+
+<tr>
+<td align="right">Method Type</td>
+<td>
+<select name="method_type" id="method_type">
+<option value="mobileinfo"{if $method_type == "mobileinfo"} selected="selected"{/if}>mobileinfo</option>
+<option value="scrape"{if $method_type == "scrape"} selected="selected"{/if}>scrape</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right">Scoping?</td>
+<td>
+        <input type="checkbox" name="scoping" {if $scoping == 1}checked="checked"{/if}>
+</td>
+</tr>
+
+<tr>
+<td align="right">Default Scope:</td>
+<td>
+    <p>{$def_scope}</p>
+</td>
+</tr>
+
+<tr><td>&nbsp;</td></tr>
+
+<tr>
+<td align="right">Email From?</td>
+<td>
+<input maxlength="60" size="60" value="{$email_from}" name="email_from">
+</td>
+</tr>
+
+<tr>
+<td align="right">Feedback Email</td>
+<td>
+<input maxlength="60" size="60" value="{$feedback_email}" name="feedback_email">
+</td>
+</tr>
+
+<tr>
+<td align="right">Email Subject Prefix</td>
+<td>
+<input maxlength="60" size="60" value="{$email_subject_prefix}" name="email_subject_prefix">
+</td>
+</tr>
+
+<tr><td>&nbsp;</td></tr>
+
+<tr>
+<td align="right">Cover Image Source</td>
+<td>
+<select name="cover_image_type" id="cover_image_type">
+<option value="openlibrary"{if $cover_image_type  == "openlibrary"} selected="selected"{/if}>openlibrary</option>
+<option value="contentcafe"{if $cover_image_type  == "contentcafe"} selected="selected"{/if}>contentcafe</option>
+<option value="googlebooks"{if $cover_image_type  == "googlebooks"} selected="selected"{/if}>googlebooks</option>
+<option value="syndetics"{if $cover_image_type  == "syndetics"} selected="selected"{/if}>syndetics</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right">Cover Vendor Login:</td>
+<td>
+<input maxlength="25" size="25" value="{$cover_userid}" name="cover_userid">
+</td>
+</tr>
+
+<tr>
+<td align="right">Cover Vendor Password:</td>
+<td>
+<input type="password" maxlength="25" size="25" value="{$cover_pass}" name="cover_pass">
+</td>
+</tr>
+
+
+</tbody></table>
+
+<p>Admin password:<input type="password" maxlength="25" size="25" name="admin_pass"></p>
+<input type="SUBMIT" value="Submit" name="submit">
+
+</tbody></table>
+
+</form>
+
+{if $scoping}
+    <p style="font-weight: bold">Scopes:</p>
+    <p style="margin-left: 1em;">
+    {foreach from=$scopes item=scope}
+    {$scope.value}: <em>{$scope.name}</em>
+    <br />
+    {/foreach}
+    </p>
+{/if}
+</body>
+</html>
