@@ -9,7 +9,7 @@
 
         if ($ret['oneres'] != True) {
             $sm->assign("searcharg", $_REQUEST['searcharg']);
-            $sm->assign("scope", $_REQUEST['scope']);
+            if(isset($_REQUEST['scope'])) $sm->assign("scope", $_REQUEST['scope']);
             $sm->assign("prev", $ret['navlinks']['Prev']);
             $sm->assign("next", $ret['navlinks']['Next']);
             $sm->assign("num", $ret['num']);

@@ -15,6 +15,8 @@
             $sm->assign("error", true);
         }
 
+        if(!isset($_COOKIE['PHPSESSID'])) $sm->assign('cookies_disabled', true);
+
         header("Content-Type: text/html; charset=utf-8");
         $sm->display("pages/login.html");
 

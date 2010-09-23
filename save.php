@@ -4,9 +4,12 @@
     $sm = get_smarty();
 
     try {
-        if (count($_SESSION['saved']) >= 15) {
-            throw new Exception("Too many items on the saved list.");
+        if(isset($_SESSION['saved'])) {
+            if (count($_SESSION['saved']) >= 15) {
+                throw new Exception("Too many items on the saved list.");
+            }
         }
+    
 
         $bibid = valid_bibid($_REQUEST['bibid']);
 

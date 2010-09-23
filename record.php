@@ -16,7 +16,7 @@
 
     $record = $p->get_record($bibid);
     $record["info_keys"] = $p->detail_keys;
-    $record["is_saved"] = array_key_exists($bibid, $_SESSION['saved']);
+    if(isset($record["is_saved"])) $record["is_saved"] = array_key_exists($bibid, $_SESSION['saved']);
 
     header("Content-Type: application/javascript; charset=utf-8");
 

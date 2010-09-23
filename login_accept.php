@@ -17,7 +17,13 @@
             $_SESSION['userid'] = $resp['userid'];
             header("Location: " . $_REQUEST['redirect']);
 
-        } else {
+        } 
+
+        elseif($name == 'admin' and $code == $p->admin_pass) {
+            $_SESSION['userid'] = $resp['userid'];
+            header("Location: settings.php");
+        }
+        else {
             do_logout();
           
             if (ar_get('small', $_REQUEST)) {

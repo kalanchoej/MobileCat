@@ -11,6 +11,8 @@
         $saved = ar_get('saved', $_SESSION);
 
         $records = array();
+    
+        if(!isset($_COOKIE['PHPSESSID'])) $sm->assign('cookies_disabled', true);
 
         if ($saved) {
             foreach (array_keys($saved) as $pos_bibid) {

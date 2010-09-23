@@ -1,10 +1,17 @@
 <html>
 <head></head>
 <body>
-<p>
+<table style="width: 100%">
+<tr>
+<td>
 <strong>MobileCat configuration:</strong><br />
 <em>Please submit administrator password when submitting form.</em>
-</p>
+</td>
+<td style="margin-right: 10px; width:auto; text-align: right; padding-right: 10px;">
+<a href="logout_accept">logout</a><br />
+<em style="color: red;">admin access restricted to this page only</em>
+</td>
+</table>
 
 {if $error}
 <p style="color: red;">ERROR: {$error}</p>
@@ -115,7 +122,6 @@
 
 </tbody></table>
 
-<p>Admin password:<input type="password" maxlength="25" size="25" name="admin_pass"></p>
 <input type="SUBMIT" value="Submit" name="submit">
 
 </tbody></table>
@@ -126,7 +132,7 @@
     <p style="font-weight: bold">Scopes:</p>
     <p style="margin-left: 1em;">
     {foreach from=$scopes item=scope}
-    {$scope.value}: <em>{$scope.name}</em>
+    {$scope->value}: <em>{$scope->name}</em>
     <br />
     {/foreach}
     </p>

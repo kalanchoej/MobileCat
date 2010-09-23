@@ -51,8 +51,7 @@ class IIIParse {
             "searcharg"    => $searcharg,
             "searchscope"  => $searchscope,
         ));
-        
-       
+         
         $url = $this->catalog_url . '/search/?' . $query . '&SORT=R';   # added SORT=R bit; sorts relevancy with albert. with others too?
 
         return $url;
@@ -60,8 +59,12 @@ class IIIParse {
 
     protected function find_num_results($html) {
         $itag = $html->find("div.browseSearchtoolMessage i", 0);
-        if (preg_match('/\d+/', $itag->innertext, $matches)) {
-            return $matches[0];
+        if(isset($itag->innertext)) {
+            if (preg_match('/\d+/', $itag->innertext, $matches)) {
+                return $matches[0];
+            } else {
+                return 0;
+            }
         } else {
             return 0;
         }
@@ -125,10 +128,16 @@ class IIIParse {
         $info['title'] = $row->find('span.briefcitTitle a', 0)->plaintext;
 
         # grab author and publisher... (not standard on all catalogs?)
-        $citDetail = preg_split('/\n/', $row->find('td.briefcitDetail', 0)->plaintext, NULL, PREG_SPLIT_NO_EMPTY);
-        if($citDetail[1]) $info['author'] = $citDetail[1];
-        if($citDetail[2]) $info['publisher'] = $citDetail[2];
-        
+        $stuff = $row->find('td.briefcitDetail', 0);
+        if($stuff = $row->find('td.briefcitDetail', 0)) {
+                //$citDetail = preg_split('/\n/', $stuff->plaintext, NULL, PREG_SPLIT_NO_EMPTY);
+                if($citDetail = preg_split('/\n/', $stuff->plaintext, NULL, PREG_SPLIT_NO_EMPTY)){
+                //if($citDetail) {
+                    if(isset($citDetail[1])) $info['author'] = $citDetail[1];
+                    if(isset($citDetail[2])) $info['publisher'] = $citDetail[2];
+            }
+        }
+
 	    #search text in the row for (the first instance of) a valid isbn
     	if(preg_match('/[\dXx]{10,13}/', $row->innertext, $potential_isbns)) {
 	    	$info['isbn'] = $potential_isbns[0];
@@ -136,7 +145,7 @@ class IIIParse {
 
         #cover_image
         $info['cover_image'] = 'static/nocover.jpg'; 
-        if($info['isbn']) $info['cover_image'] = $this->find_cover_image($info['isbn']);
+        if(isset($info['isbn'])) $info['cover_image'] = $this->find_cover_image($info['isbn']);
         
         #bibid  
 	    if($bibid = $this->scrape_bibid($row->innertext)) {		#what makes a valid bibid, anyway?
@@ -147,16 +156,17 @@ class IIIParse {
 	    #how well do the below work on other catalogs?
  
         #extra
-        $bibitems = $row->find('tr.bibItemsEntry td');
+        if($bibitems = $row->find('tr.bibItemsEntry td'))
+        {
+            #location
+            $info['location'] = $this->xtrim($bibitems[0]->plaintext);
         
-        #location
-        $info['location'] = $this->xtrim($bibitems[0]->plaintext);
+            #callno
+            $info['callno'] = $this->xtrim($bibitems[1]->plaintext);
         
-        #callno
-        $info['callno'] = $this->xtrim($bibitems[1]->plaintext);
-        
-        #status
-        $info['status'] = $this->xtrim($bibitems[2]->plaintext); 
+            #status
+            $info['status'] = $this->xtrim($bibitems[2]->plaintext); 
+        }
 
         $row->clear();
         unset($row);

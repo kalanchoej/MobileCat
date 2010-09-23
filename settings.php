@@ -8,21 +8,7 @@
         $sm->assign($setting, $value);
     }
 
-
-
     try {
-        /*
-        if ($redirect = ar_get('redirect', $_REQUEST)) {
-            $sm->assign("redirect", $redirect);
-        } else {
-            $sm->assign("redirect", $p->base_url);
-        }
-
-        if ($error = ar_get('error', $_REQUEST)) {
-            $sm->assign("error", true);
-        }
-        */
-
         header("Content-Type: text/html; charset=utf-8");
         $sm->display("pages/config.html");
 

@@ -105,7 +105,8 @@ function get_browse_results() {
     
     # For a normal search link, just use the search arg
     } else {
-        return $p->get_browse($_REQUEST['searcharg'], $_REQUEST['scope']);
+        if(isset($_REQUEST['scope'])) return $p->get_browse($_REQUEST['searcharg'], $_REQUEST['scope']);
+        else return $p->get_browse($_REQUEST['searcharg']);
     }
 }
 

@@ -10,59 +10,51 @@
     }
 
     # handle changes submitted
-    if($_POST['admin_pass'] != $settings->admin_pass) {                           
-        $error = "Invalid administrator password, please try again.";         
-    } elseif($_POST) {
+    if($_POST) {
         # open settings
         $filename = "SiteParse.php";
-        $f = fopen($filename, "r+");
+        $f = fopen($filename, "r");
         $contents = fread($f, filesize($filename));
         fclose($f);
-        
+
         foreach($_POST as $name => $value) {
-            # not allowed to change password in config form; todo: change password in config form
-            if($name == 'admin_pass') continue;
+            # not allowed to change password in config form
             if($name == 'scoping') $enable_scoping = 1;
 
             # if $name is found in $contents, replace the whole line
-            $contents = preg_replace("/$name.*/", "$name = \"$value\";", $contents);
+            //$contents = preg_replace("/$name.*/", "$name = \"$value\";", $contents);
+            if(array_key_exists($name, $settings)) {
+                $settings->$name = $value;
+            }
         }
 
         # initialize our scopes
-        if($enable_scoping) {
+        if(isset($enable_scoping)) {
             # gather scopes
             $scopes = $settings->find_scopes($settings->catalog_url."/search/X");
 
             # pop off default scope
             $default_scope = array_pop($scopes);
 
-            $scopes_string .= 'array(';
-            foreach($scopes as $scope) { 
-
-                $scopes_string .= 'array("name" => "'.$scope['name'].'", "value" => "'.$scope['value'].'"),';
-            }
-            $scopes_string .= ')';
-
-            # enable scoping in file
-            $contents = preg_replace("/scoping.*/", "scoping = 1;", $contents);
-            $contents = preg_replace("/def_scope.*/", "def_scope = $default_scope;", $contents);
-
-            # write scopes to file
-            $contents = preg_replace("/scopes.*/", "scopes = $scopes_string;", $contents);
+            $settings->scoping = 1; 
+            $settings->def_scope = $default_scope;
+            $settings->scopes = $scopes;
         } else {
-            # $scoping = 0
-            $contents = preg_replace("/scoping.*/", "scoping = 0;", $contents);
-
-            # $def_scope = 0
-            $contents = preg_replace("/def_scope.*/", "def_scope = 0;", $contents);
-
-            # $scopes = array()
-            $contents = preg_replace("/scopes.*/", "scopes = null;", $contents);
+            $settings->scoping = 0;
+            $settings->def_scope = 0;
+            $settings->scopes = array();
         }
 
+        # validation and standardization
+
+        # check for trailing slash in base_url
+        if(substr($settings->base_url, -1) != '/') $settings->base_url = $settings->base_url.'/';
+        # remove trailing slashes from catalog_url
+        if(substr($settings->catalog_url, -1) == '/') $settings->catalog_url = rtrim($settings->catalog_url, '/');
+
         # write new settings to file
-        $f = fopen($filename, "w");
-        $contents = fwrite($f, $contents);
+        $f = fopen(".settings", "w");
+        $contents = fwrite($f, gzcompress(json_encode($settings)));
         fclose($f);
     }
     
