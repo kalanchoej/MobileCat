@@ -3,7 +3,6 @@
 
     clear_prev_search();
     $sm = get_smarty();
-    $p = new SiteParse;
 
     try {
         $sm->assign("jsfiles", array("static/index.js"));

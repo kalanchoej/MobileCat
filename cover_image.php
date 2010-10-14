@@ -14,9 +14,9 @@
             $client = $settings->cover_userid;
             $url = "http://www.syndetics.com/index.php?isbn=$isbn/sc.gif&client=$client";
         } elseif ($settings->cover_image_type == "openlibrary") {
-            $url = "http://covers.openlibrary.org/b/isbn/$isbn-S.jpg";  #api documentation is wrong; this returns a redirect that must be parsed
-            $resp = http_parse_message(http_get($url));
-            $url = $resp->headers['Location'];
+            $url = "http://covers.openlibrary.org/b/isbn/$isbn-M.jpg";  #api documentation is wrong; this returns a redirect that must be parsed
+            //$resp = http_parse_message(http_get($url));
+            //$url = $resp->headers['Location'];
         } elseif ($settings->cover_image_type == "contentcafe") {
             $user = $settings->cover_userid;
             $pass =  $settings->cover_pass;
@@ -37,7 +37,8 @@
 	
         if ($url) {
             $resp = http_parse_message(http_get($url));
-            
+            if($resp->headers['Content-Length'] < 1000) throw new Exception("Empty response.");
+
             header(sprintf("Content-Type: %s", $resp->headers['Content-Type']));
 	        $matches = preg_split('/(\<!DOCTYPE|\<html)/', $resp->body);	#strip excess html returned in the body of the request (contentcafe)
 	        echo $matches[0];

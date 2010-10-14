@@ -1,31 +1,26 @@
-{foreach from=$results item=res}
-    <div class="bres" id="bres{$res.bibid}">
-        <a class="bhead invis" id="bhead{$res.bibid}" 
-            {if $js}
-                href="#"
-            {else} 
-                href="{$baseurl}detail?bibid={$res.bibid}"
-            {/if}
-        >
-                <table>
-                    <tr>
-                        <td class="cover_image">
-                            {if $res.cover_image}
-                                <img src="{$res.cover_image}">
-                            {/if}
-                        </td>
-                        <td valign="middle" width="100%">
-                            <span class="title">{$res.title}</span><br>
-                            <b>{$res.media}</b>
-                  
-                            {foreach from=$res.extra item=extra}
-                                {$extra}
-                            {/foreach}
-                        </td>
-                    </tr>
-                </table>
-            </a>
-                        
-        <div class="hide det" id="det{$res.bibid}"></div>
+{foreach from=$results item=res key=resindex}
+    {if $res}
+        <div class="bres" id="bres{$res.bibid}" style="min-height: 120px;{if $resindex&1} background-color: #E5E6E8;{/if}">
+	    <a class="bhead invis" id="bhead{$res.bibid}" style="font-weight: normal;" {if $js}href="#"{else}href="{$baseurl}detail?bibid={$res.bibid}"{/if}>
+		    <table>
+       		    <tr>
+               	    <td class="cover_image" style='min-width: 20px; padding-right: .3em; padding-left: .2em;'><img style="max-height: 100px; max-width: 75px;" src="{$res.cover_image}"></td>
+              	    <td style="width: 100%">
+       	    		    <span style='font-size: 14px;'><u>{$res.title}</u></span>
+                        {if $res.author}<br /><span class="author_pub">{$res.author}</span>{/if}
+                        {if $res.media}<br /><b>{$res.media}</b>{/if}
+                        {foreach from=$res.extra item=extra}
+                            {$extra}
+                        {/foreach} 
+                   	    {if $res.location}<br /><span class="location"><em>{$res.location}</em></span>{/if}
+    		    	    {if $res.callno}<br /><br /><span style='font-weight: bold;'>{$res.callno}</span>{/if}{if $res.status}  <span class="status">{$res.status}</span>{/if}
+			        	{if $res.isbn}<span class="isbn hide" id="{$res.isbn}">{$res.isbn}</span>{/if}
+		    	    </td>
+                    <td style="vertical-align: bottom; padding-bottom: .5em;"><img src="static/moreinfo.gif" /></td>
+		        </tr>
+		    </table>
+        </a>
+    <div class="hide det" id="det{$res.bibid}" style="background-color: white;"></div>
     </div>
+    {/if}
 {/foreach}
