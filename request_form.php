@@ -22,12 +22,16 @@
        
             $loc_options = $p->get_request_form($_SESSION['name'], $_SESSION['code'], $rurl);
 
+            # if only one request location, skip step1?
+            if(!$loc_options) $loc_options = array("Library pickup?");
+
             $sm->assign("jsfiles", array("static/relogin.js"));
             $sm->assign("bibid", $bib);
             $sm->assign("url", $rurl);
+
             $sm->assign("loc_options", $loc_options);
-        
             $sm->display("forms/request_form_step1.html");
+
         }
     } catch (Exception $e) {
         $sm->assign("error", $e->GetMessage());

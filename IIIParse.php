@@ -130,11 +130,9 @@ class IIIParse {
         # grab author and publisher... (not standard on all catalogs?)
         $stuff = $row->find('td.briefcitDetail', 0);
         if($stuff = $row->find('td.briefcitDetail', 0)) {
-                //$citDetail = preg_split('/\n/', $stuff->plaintext, NULL, PREG_SPLIT_NO_EMPTY);
-                if($citDetail = preg_split('/\n/', $stuff->plaintext, NULL, PREG_SPLIT_NO_EMPTY)){
-                //if($citDetail) {
-                    if(isset($citDetail[1])) $info['author'] = $citDetail[1];
-                    if(isset($citDetail[2])) $info['publisher'] = $citDetail[2];
+            if($citDetail = preg_split('/\n/', $stuff->plaintext, NULL, PREG_SPLIT_NO_EMPTY)){
+                if(isset($citDetail[1])) $info['author'] = $citDetail[1];
+                if(isset($citDetail[2])) $info['publisher'] = $citDetail[2];
             }
         }
 
@@ -175,7 +173,8 @@ class IIIParse {
         return $info;
     }
 
-	protected function xtrim($text) {
+    # trims withspace and html-code spaces
+    protected function xtrim($text) {
         return trim(str_replace('&nbsp;', '', $text));
     }
 
@@ -492,18 +491,16 @@ class IIIParse {
        
         $loc_options = array();
         
-        $select = $html->find("select[name=locx00]", 0);
-        if (!$select) {
-            throw new Exception("Can't find request form.");
-        }
-        $options_htmls = $select->find("option");
+        if($select = $html->find("select[name=locx00]", 0)) {
+            $options_htmls = $select->find("option");
 
-        foreach ($options_htmls as $opt) {
-            $txt = ptext($opt);
-            if (!preg_match($this->invalid_request_locs, $txt)) {
-                $loc_options[$opt->value] = $txt;
+            foreach ($options_htmls as $opt) {
+                $txt = ptext($opt);
+                if (!preg_match($this->invalid_request_locs, $txt)) {
+                    $loc_options[$opt->value] = $txt;
+                }
             }
-        };
+        }
 
         return $loc_options;
     }
@@ -540,13 +537,21 @@ class IIIParse {
     }
 
 
-    public function get_checked_out_items($name, $code, $userid, $url=null) {
+    public function get_my_account_info($name, $code, $userid, $url=null) {
         $login_resp = $this->login($name, $code);
 
         # If renewing items, this url will be non-null
-        if ($url == null) {
-            $url = $this->catalog_url . '/patroninfo~S' . $this->def_scope . "/$userid/items";
+        if ($url) {
+            # is parsing a url when present, then always assigning the page to items
+            #  - is this stable? does it play nice when checked-out items present?
+
+            $resp = http_parse_message(http_get(
+                "$url", array("cookies" => $login_resp['cookies'])
+            ));
+
         }
+
+        $url = $this->catalog_url . '/patroninfo~S' . $this->def_scope . "/$userid/items";
 
         $args = array(
             "sortByDueDate" => "byduedate"
@@ -558,7 +563,7 @@ class IIIParse {
         ));
 
         $html = str_get_dom($resp->body);
-        
+
         # array of arrays for each checked out item, properties:
         # checkbox_name (renew0, renew1, etc.)
         # itemid  (i123435)
@@ -570,8 +575,59 @@ class IIIParse {
         # call
 
         $items = $this->find_checked_out_items($userid, $html);
+        $holds = $this->find_holds($userid, $html, $login_resp['cookies']);
+        $fines = $this->find_fines($userid, $html, $login_resp['cookies']);
 
-        return $items;
+        return array($items, $holds, $fines);
+    }
+
+    function find_fines($userid, $html, $cookie) {
+        $url = $this->catalog_url . '/patroninfo~S' . $this->def_scope . "/$userid/overdues";
+
+        $html = http_parse_message(http_get($url, array("cookies" => $cookie)));
+        $resp = str_get_dom($html->body);
+        $fines = $resp->find('td.patFuncFinesTotalAmt', 0)->plaintext;
+        
+        return $fines; 
+    }
+
+    public function find_holds($userid, $url, $cookie) {
+        $url = $this->catalog_url . '/patroninfo~S' . $this->def_scope . "/$userid/holds";
+
+        $holds_html = http_parse_message(http_get($url, array("cookies" => $cookie)));
+        $resp = str_get_dom($holds_html->body);
+        $rows = $resp->find('#hold_form tr.patFuncEntry');
+        
+        foreach($rows as $row) { 
+            $hold = array();
+
+            # these might need a utf8_decode(); albert does.
+            $hold['title'] = trim($row->find('.patFuncTitle', 0)->plaintext);
+            $hold['pickup'] = $row->find('.patFuncPickup', 0)->plaintext;
+            $hold['cancel_by_date'] = $row->find('.patFuncCancel', 0)->plaintext;
+
+            $hold['status'] = $row->find('.patFuncStatus', 0)->plaintext;
+            
+            $ret = preg_match('/cancel(.*)/',  $row->find('.patFuncMark input', 0)->name, $match);
+            $itemnum = end($match);
+
+            $hold['cancel_link'] = $this->catalog_url . '/patroninfo~S' . $this->def_scope . "/$userid/holds?" . "currentsortorder=current_pickup&loc$itemnum=&cancel$itemnum=on&currentsortorder=current_pickup&updateholdssome=yes";            
+
+            $holds[] = $hold;
+        }
+
+        return $holds;
+    }
+
+    public function cancel_hold($id, $all=null) {
+        if(!$all) {
+            # cancel hold from $id
+            echo 'bang';
+        } else {
+            # cancel all holds
+        }
+
+        return null;
     }
     
     # Return all values defined in $detail_keys (above) in one dash-delimited string

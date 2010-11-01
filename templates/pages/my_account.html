@@ -1,0 +1,64 @@
+{include file='include/head.html'}
+
+<br />
+{if !empty($fines)}
+    <div class="smallhead basicpad" style="color: red;">Current fines: {$fines}</div>
+{/if smallhead}
+
+<br>
+{if !empty($items)}
+    
+    <div class="smallhead basicpad">Your checked-out items</div>
+
+    {foreach from=$items item=i}
+        <div class="bres">
+            <table>
+                <tr>
+                    <td class="cover_image">
+                        <a class="button" href="{$baseurl}my_account?url={$i.renew_link|escape:'url'}"><span>Renew</span></a>
+                    </td>
+
+                    <td valign="middle" width="100%">
+                        <span class="title">{$i.title}</span><br>
+                        <span {if $i.overdue}class="overdue"{/if}>{$i.status}</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+    {/foreach}
+
+{else}
+    <div class="basicpad smallhead">No checked-out items.</div>
+{/if}
+
+{if !empty($holds)}
+    <br />
+    
+    <div class="smallhead basicpad">Your current holds:</div>
+
+    {foreach from=$holds item=h}
+        <div class="bres">
+            <table>
+                <tr>
+                    <td class="cover_image">
+                        <a class="button" href="{$baseurl}my_account?url={$h.cancel_link|escape:'url'}"><span>Clear</span></a>
+                    </td>
+
+                    <td valign="middle" width="100%">
+                        <span class="title">{$h.title}</span><br /><br />
+                        <span><em>{$h.status}</em>{if $h.available} (pickup at {$h.pickup})}{/if}</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+    {/foreach}
+
+{else}
+    <div class="basicpad smallhead">No current holds.</div>
+{/if}
+
+<div class="topborder"></div>
+
+{include file="include/foot.html"}
