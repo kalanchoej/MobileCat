@@ -7,14 +7,18 @@ class SiteParse extends IIIParse {
     public $catalog_url = "http://example.library.edu";
     public $base_url = "http://m.example.library.edu/";
 
-    public $method_type = "scrape";
+    public $method_type = "mobileinfo";
+    #public $method_type = "scrape";
 
     public $catalog_name = "Catalog";
 
     public $email_from = "library@example.edu";
     public $feedback_email = "feedback@example.edu";
 
-    public $cover_image_type = "openlibrary";
+    public $cover_image_type = "syndetics";
+    #public $cover_image_type = "openlibrary";
+    #public $cover_image_type = "contentcafe";
+    #public $cover_image_type = "googlebooks";
     
     public $cover_userid = "";
     public $cover_pass = "";
