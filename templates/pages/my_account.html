@@ -2,13 +2,13 @@
 
 <br />
 {if !empty($fines)}
-    <div class="smallhead basicpad" style="color: red;">Current fines: {$fines}</div>
+    <div class="smallhead basicpad attn">Current fines: {$fines}</div>
 {/if smallhead}
 
 <br>
 {if !empty($items)}
     
-    <div class="smallhead basicpad">Your checked-out items</div>
+    <div class="smallhead basicpad">Checked-out items</div>
 
     {foreach from=$items item=i}
         <div class="bres">
@@ -20,7 +20,7 @@
 
                     <td valign="middle" width="100%">
                         <span class="title">{$i.title}</span><br>
-                        <span {if $i.overdue}class="overdue"{/if}>{$i.status}</span>
+                        <span {if $i.overdue}class="attn"{/if}>{$i.status}</span>
                     </td>
                 </tr>
             </table>
@@ -35,14 +35,16 @@
 {if !empty($holds)}
     <br />
     
-    <div class="smallhead basicpad">Your current holds:</div>
+    <div class="smallhead basicpad">Current holds</div>
 
     {foreach from=$holds item=h}
         <div class="bres">
             <table>
                 <tr>
                     <td class="cover_image">
-                        <a class="button" href="{$baseurl}my_account?url={$h.cancel_link|escape:'url'}"><span>Clear</span></a>
+                      { if $h.cancel_link } 
+                        <a class="button" href="{$baseurl}my_account?url={$h.cancel_link|escape:'url'}"><span>Cancel</span></a>
+                      { /if }
                     </td>
 
                     <td valign="middle" width="100%">

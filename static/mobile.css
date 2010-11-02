@@ -36,8 +36,8 @@ input.login {
     color: #000;
 }
 
-.overdue{
-    color: #ff0000;
+.attn{
+    color: red;
 }
 
 .gobutton {

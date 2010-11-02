@@ -611,7 +611,12 @@ class IIIParse {
             $ret = preg_match('/cancel(.*)/',  $row->find('.patFuncMark input', 0)->name, $match);
             $itemnum = end($match);
 
-            $hold['cancel_link'] = $this->catalog_url . '/patroninfo~S' . $this->def_scope . "/$userid/holds?" . "currentsortorder=current_pickup&loc$itemnum=&cancel$itemnum=on&currentsortorder=current_pickup&updateholdssome=yes";            
+            if ($ret) {
+                $hold['cancel_link'] = $this->catalog_url . '/patroninfo~S' . $this->def_scope . "/$userid/holds?" . "currentsortorder=current_pickup&loc$itemnum=&cancel$itemnum=on&currentsortorder=current_pickup&updateholdssome=yes";            
+            }
+            else {
+                $hold['cancel_link'] = null; 
+            }
 
             $holds[] = $hold;
         }
