@@ -3,7 +3,7 @@
 <div class="basicpad">
 
 {if $cookies_disabled}
-        <p class="smallhead" style="font-weight: bold; font-size: 14pt; color: red;">Please enable cookies to login.</p>
+        <p class="bigerror">Please enable cookies to login.</p>
 {/if}
 
 
@@ -12,7 +12,6 @@
             Invalid login, try again.
         </div>
     {/if}
-
     <form action="{$baseurl}login_accept">
         <input type="hidden" name="redirect" value="{$redirect}">
 

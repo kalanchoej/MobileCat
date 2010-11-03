@@ -6,7 +6,7 @@
             <input type="text" name="searcharg" id="searchbox" class="searchbox" value="{$searcharg|escape:'html'}">
             <br />
             {if $scoping}
-            <select name="scope" id="scope" style="width: 97%; font-size: 14px; margin-left: 5px; margin-right: 5px; margin-top: 3px; margin-bottom: 3px; ">
+            <select name="scope" id="scope" class="scopedrop">
             {foreach from=$scopes item=scope_option}
 
             {if $scope}
