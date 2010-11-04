@@ -52,7 +52,7 @@ class IIIParse {
             "searchscope"  => $searchscope,
         ));
          
-        $url = $this->catalog_url . '/search/?' . $query . '&SORT=R';   # added SORT=R bit; sorts relevancy with albert. with others too?
+        $url = $this->catalog_url . '/search/?' . $query;
 
         return $url;
     }
