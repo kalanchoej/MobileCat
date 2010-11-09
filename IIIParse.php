@@ -396,8 +396,6 @@ class IIIParse {
         if(($num == 0) && ($this->one_entry_found($html))) {
             $rec = $this->get_record_from_html($html);
 
-            $rec['bibid'] = $this->scrape_bibid($html);
-        
             $html->clear();
             unset($html);
             
@@ -649,8 +647,7 @@ class IIIParse {
 
     protected function find_bibid($html) {
         $anchor = $html->find('#recordnum', 0);
-        $bibid =  'b' . ending_digits($anchor->href);
-        return $bibid;
+        return $this->scrape_bibid($anchor->href);
     }
 
     protected function get_record_from_html($html, $bibid=null) {
