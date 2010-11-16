@@ -540,16 +540,11 @@ class IIIParse {
 
         # If renewing items, this url will be non-null
         if ($url) {
-            # is parsing a url when present, then always assigning the page to items
-            #  - is this stable? does it play nice when checked-out items present?
-
             $resp = http_parse_message(http_get(
                 "$url", array("cookies" => $login_resp['cookies'])
             ));
 
-        }
-
-        $url = $this->catalog_url . '/patroninfo~S' . $this->def_scope . "/$userid/items";
+        } else $url = $this->catalog_url . '/patroninfo~S' . $this->def_scope . "/$userid/items";
 
         $args = array(
             "sortByDueDate" => "byduedate"
