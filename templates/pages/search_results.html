@@ -5,7 +5,7 @@
         {if $js}
           href="#"
         {else}
-          href="{$baseurl}detail?bibid={$res.bibid}"
+          href="{$baseurl}detail?bibid={$res.bibid}{if $scope != NULL}&scope={$scope}{/if}"
         {/if}
       >
 

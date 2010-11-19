@@ -14,6 +14,7 @@
 
         $sm = get_smarty();
         $sm->assign("r", $record);
+        if(isset($_REQUEST['scope'])) $sm->assign("scope", $_REQUEST['scope']);
 
         header("Content-Type: text/html; charset=utf-8");
         $sm->display("pages/detail_nojs.html");
