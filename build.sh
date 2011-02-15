@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=1.01
+VERSION=1.1
 
 rm -rf mobilecat-$VERSION
 mkdir mobilecat-$VERSION
