@@ -27,6 +27,9 @@ function get_smarty() {
     $smarty->assign("scopes", $p->scopes);
     $smarty->assign("def_scope", $p->def_scope);
 
+    # Does the catalog use PIN numbers
+    $smarty->assign("uses_pin", $p->uses_pin);
+
     # Last email address used to send a record
     $smarty->assign('saved_email',  ar_get('email', $_SESSION));
 
@@ -37,6 +40,7 @@ function get_smarty() {
     # User login info
     $smarty->assign('saved_name', ar_get('name', $_SESSION));
     $smarty->assign('saved_code', ar_get('code', $_SESSION));
+    $smarty->assign('saved_pin', ar_get('code', $_SESSION));
     $smarty->assign('saved_userid', ar_get('userid', $_SESSION));
 
     $smarty->assign('js', use_js());

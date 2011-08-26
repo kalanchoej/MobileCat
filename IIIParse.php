@@ -510,10 +510,11 @@ class IIIParse {
 
 
     // Logs in and returns an array of cookie kvps
-    public function login($name, $code) {
+    public function login($name, $code, $pin=null) {
         $query = http_build_query(array(
             "name" => $name,
             "code" => $code,
+	    "pin"  => $pin,
         ));
 
         #this doesn't work on catalogs that use a secure connection when accessing patron accounts; using https:// in $catalog_url solves this(?) at least for Albert

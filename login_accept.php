@@ -13,7 +13,11 @@
             $_SESSION['code'] = $code;
         }
 
-        if ($resp = $p->login($name, $code)) {
+	if ($pin = ar_get('pin', $_REQUEST)) {
+	    $_SESSION['pin'] = $pin;
+	}
+
+        if ($resp = $p->login($name, $code, $pin)) {
             $_SESSION['userid'] = $resp['userid'];
             header("Location: " . $_REQUEST['redirect']);
 
