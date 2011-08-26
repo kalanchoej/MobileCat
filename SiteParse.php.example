@@ -15,16 +15,19 @@ class SiteParse extends IIIParse {
     public $email_from = "no-reply@example.com";
     public $feedback_email = "mobilefeedback@example.com";
 
-    #public $cover_image_type = "syndetics";
+    public $cover_image_type = "syndetics";
     #public $cover_image_type = "openlibrary";
     #public $cover_image_type = "contentcafe";
     #public $cover_image_type = "googlebooks";
     #public $syndetics_client = "archway";
     
-    #public $cover_userid = "";
-    #public $cover_pass = "";
+    public $cover_userid = "";
+    public $cover_pass = "";
 
     public $email_subject_prefix = "Library ";
+
+    # If users must enter a PIN number to log in, set this to 1
+    public $uses_pin = 0;
 
     # to enable scoping, set this to 1
     public $scoping = 0;
