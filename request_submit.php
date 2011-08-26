@@ -21,15 +21,17 @@
 
             $name = $_SESSION['name'];
             $code = $_SESSION['code'];
-
-            $resp = $p->get_request_loc($name, $code, $req_url, $post_params);
-
-            $sm->assign("locs", $resp["locs"]);
-            $sm->assign("hidden", $resp["hidden"]);
-            $sm->assign("url", $req_url);
-            $sm->assign("bibid", ar_get('bibid', $_REQUEST));
-
-            $sm->display("forms/request_form_step2.html");
+	    
+	    if ($p->submit_item_request($name, $code, $req_url, $post_params)) {
+                $sm->display("responses/request_success.html");
+            } else {	
+            	$resp = $p->get_request_loc($name, $code, $req_url, $post_params);
+           	$sm->assign("url", $req_url);
+            	$sm->assign("locs", $resp["locs"]);
+            	$sm->assign("hidden", $resp["hidden"]);
+            	$sm->assign("bibid", ar_get('bibid', $_REQUEST));
+            	$sm->display("forms/request_form_step2.html");
+	    }
         }
 
     } catch (Exception $e) {

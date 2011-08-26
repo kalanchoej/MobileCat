@@ -798,7 +798,8 @@ class IIIParse {
         if (preg_match('/Your request for.*was successful/i', $resp->body)) {
             return true;
         } else {
-            throw new Exception("Unable to request item");
+            return false;
+	    #throw new Exception("Unable to request item");
         }
     }
 }
