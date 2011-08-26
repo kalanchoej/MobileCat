@@ -17,6 +17,10 @@ class IIIParse {
     public $def_scope     = "0";
     public $def_type      = "X";
 
+    public $loc_td = 0;
+    public $call_td = 1;
+    public $status_td = 2;
+
     public $feedback_email = "feedback@example.com";
 
     public $max_value_length = null;
@@ -318,11 +322,11 @@ class IIIParse {
 
             # First two columns show the physical location and the call number
             # in an <a> tag.
-            $loc['location'] = ptext($tds[0]);
-            $loc['call']     = ptext($tds[1]);
+            $loc['location'] = ptext($tds["0"]);
+            $loc['call']     = ptext($tds[$call_td]);
 
             # Third column shows availability status. Remove superfluous nbsp;
-            $loc['status']   = strtolower(ptext($tds[2]));
+            $loc['status']   = strtolower(ptext($tds[$status_td]));
 
             if (in_array($loc['status'], $this->available_status)) {
                 $loc['available'] = true;
@@ -656,7 +660,7 @@ class IIIParse {
         }
 
         # Book locations (if available)
-        $locs = $this->find_locs($html);
+        $locs = $this->find_locs($html, $loc_td, $call_td, $status_td);
 
         # Links to click on (if available)
         $links  = $this->find_links($html);
