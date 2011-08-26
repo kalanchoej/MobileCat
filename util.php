@@ -118,6 +118,7 @@ function do_logout() {
     unset($_SESSION['name']);
     unset($_SESSION['code']);
     unset($_SESSION['userid']);
+    unset($_SESSION['pin']);
 }
 
 function clear_prev_search() {
