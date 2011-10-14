@@ -1,0 +1,5 @@
+SiteParse.php
+templates_c/*
+*.orig
+*.rej
+*.patch

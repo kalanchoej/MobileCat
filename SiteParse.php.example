@@ -4,26 +4,26 @@ require_once('IIIParse.php');
 
 class SiteParse extends IIIParse {
 
-    public $catalog_url = "http://example.library.edu";
-    public $base_url = "http://m.example.library.edu/";
+    public $catalog_url = "https://example.edu";
+    public $base_url = "https://m.example.edu/";
 
     public $method_type = "mobileinfo";
     #public $method_type = "scrape";
 
-    public $catalog_name = "Catalog";
+    public $catalog_name = "Example";
 
-    public $email_from = "library@example.edu";
+    public $email_from = "no-reply@example.edu";
     public $feedback_email = "feedback@example.edu";
 
-    public $cover_image_type = "syndetics";
+    #public $cover_image_type = "syndetics";
     #public $cover_image_type = "openlibrary";
     #public $cover_image_type = "contentcafe";
-    #public $cover_image_type = "googlebooks";
+    public $cover_image_type = "googlebooks";
     
     public $cover_userid = "";
     public $cover_pass = "";
 
-    public $email_subject_prefix = "Library";
+    public $email_subject_prefix = "Mobilecat ";
 
     # to enable scoping, set this to 1
     public $scoping = 0;
@@ -37,7 +37,7 @@ class SiteParse extends IIIParse {
         #   array("name" => "Reference", "value" => "1"),
         #   array("name" => "Books", "value" => "2"),
         #   .. etc
-
+	array("name" => "Search entire collection", "value" => "50"),
    ); 
    # end scopes
 
