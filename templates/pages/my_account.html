@@ -20,7 +20,7 @@
 
                     <td valign="middle" width="100%">
                         <span class="title">{$i.title}</span><br>
-                        <!--<span {if $i.overdue}class="attn"{/if}>{$i.status}</span>-->
+                        <span {if $i.overdue}class="attn"{/if}>{$i.status}</span>
                     </td>
                 </tr>
             </table>
@@ -42,14 +42,14 @@
             <table>
                 <tr>
                     <td class="cover_image">
-                      {if $h.cancel_link} 
+                      {if isset($h.cancel_link)} 
                         <a class="button" href="{$baseurl}my_account?url={$h.cancel_link|escape:'url'}"><span>Cancel</span></a>
                       {/if}
                     </td>
 
                     <td valign="middle" width="100%">
                         <span class="title">{$h.title}</span><br /><br />
-                        <span><em>{$h.status}</em><!--{if $h.available} (pickup at {$h.pickup})}{/if}--></span>
+                        <span><em>{$h.status}</em>{if $h.available} (pickup at {$h.pickup}){/if}</span>
                     </td>
                 </tr>
             </table>

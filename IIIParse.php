@@ -135,8 +135,8 @@ class IIIParse {
         $stuff = $row->find('td.briefcitDetail', 0);
         if($stuff = $row->find('td.briefcitDetail', 0)) {
             if($citDetail = preg_split('/\n/', $stuff->plaintext, NULL, PREG_SPLIT_NO_EMPTY)){
-                if(isset($citDetail[1])) $info['author'] = $citDetail[1];
-                if(isset($citDetail[2])) $info['publisher'] = $citDetail[2];
+                if(isset($citDetail[1])) $info['author'] = strtr($citDetail[1]); // FIX:  Non-standard characters cause results not to show at all.
+                if(isset($citDetail[2])) $info['publisher'] = strtr($citDetail[2]);
             }
         }
 
@@ -507,6 +507,84 @@ class IIIParse {
         return $loc_options;
     }
 
+    // MOBIUS BEGIN
+    public function get_needby_month($name, $code, $request_url) {
+      $login_resp = $this->login($name, $code);
+
+      $resp = http_parse_message(http_get(
+          $this->catalog_url . $request_url, array("cookies" => $login_resp['cookies'])
+      ));
+
+      $html = str_get_dom($resp->body);
+     
+      $nbMonth = array();
+      
+      if($select = $html->find("select[name=needby_Month]", 0)) {
+          $options_htmls = $select->find("option");
+
+          foreach ($options_htmls as $opt) {
+              $txt = ptext($opt);
+              if (!preg_match($this->invalid_request_locs, $txt)) {
+                  $nbMonth[$opt->value] = $txt;
+              }
+          }
+      }
+
+      return $nbMonth;
+    }
+    
+    public function get_needby_day($name, $code, $request_url) {
+      $login_resp = $this->login($name, $code);
+
+      $resp = http_parse_message(http_get(
+          $this->catalog_url . $request_url, array("cookies" => $login_resp['cookies'])
+      ));
+
+      $html = str_get_dom($resp->body);
+     
+      $nbDay = array();
+      
+      if($select = $html->find("select[name=needby_Day]", 0)) {
+          $options_htmls = $select->find("option");
+
+          foreach ($options_htmls as $opt) {
+              $txt = ptext($opt);
+              if (!preg_match($this->invalid_request_locs, $txt)) {
+                  $nbDay[$opt->value] = $txt;
+              }
+          }
+      }
+
+      return $nbDay;
+    }
+    
+    public function get_needby_year($name, $code, $request_url) {
+      $login_resp = $this->login($name, $code);
+
+      $resp = http_parse_message(http_get(
+          $this->catalog_url . $request_url, array("cookies" => $login_resp['cookies'])
+      ));
+
+      $html = str_get_dom($resp->body);
+     
+      $nbYear = array();
+      
+      if($select = $html->find("select[name=needby_Year]", 0)) {
+          $options_htmls = $select->find("option");
+
+          foreach ($options_htmls as $opt) {
+              $txt = ptext($opt);
+              if (!preg_match($this->invalid_request_locs, $txt)) {
+                  $nbYear[$opt->value] = $txt;
+              }
+          }
+      }
+
+      return $nbYear;
+    }
+
+    // MOBIUS END
+
     public function send_item_request($name, $code, $request_url, $formdata) {
         $login_resp = $this->login($name, $code);
 
@@ -803,8 +881,7 @@ class IIIParse {
         if (preg_match('/Your request for.*was successful/i', $resp->body)) {
             return true;
         } else {
-            return false;
-	    #throw new Exception("Unable to request item");
+            throw new Exception("Unable to request item");
         }
     }
 }

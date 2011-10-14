@@ -16,7 +16,7 @@
             $url = ar_get('request_url', $_REQUEST);
 
             $post_params = array();
-            foreach (array('radio', 'locx00', 'inst', 'submit', 'submit.x', 'submit.y', 'name', 'code') as $key) {
+            foreach (array('radio', 'locx00', 'inst', 'submit', 'submit.x', 'submit.y', 'name', 'code', 'needby_Month', 'needby_Day', 'needby_Year') as $key) {
                 $post_params[$key] = ar_get($key, $_REQUEST);
             }
 

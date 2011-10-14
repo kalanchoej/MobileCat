@@ -21,7 +21,10 @@
             $rurl = ar_get('url', $_REQUEST);
        
             $loc_options = $p->get_request_form($_SESSION['name'], $_SESSION['code'], $rurl);
-
+            $nbMonth = $p->get_needby_month($_SESSION['name'], $_SESSION['code'], $rurl);
+            $nbDay = $p->get_needby_day($_SESSION['name'], $_SESSION['code'], $rurl);
+            $nbYear = $p->get_needby_year($_SESSION['name'], $_SESSION['code'], $rurl);
+            
             # if only one request location, skip step1?
             if(!$loc_options) $loc_options = array("Library pickup?");
 
@@ -30,6 +33,10 @@
             $sm->assign("url", $rurl);
 
             $sm->assign("loc_options", $loc_options);
+            $sm->assign("nbMonth", $nbMonth);
+            $sm->assign("nbDay", $nbDay);
+            $sm->assign("nbYear", $nbYear);
+            
             $sm->display("forms/request_form_step1.html");
 
         }
