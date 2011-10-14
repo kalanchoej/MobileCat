@@ -19,6 +19,11 @@ class SiteParse extends IIIParse {
     #public $cover_image_type = "openlibrary";
     #public $cover_image_type = "contentcafe";
     public $cover_image_type = "googlebooks";
+
+    # Because some catalogs use non-standard item table layouts, set the values below to the appropriate array keys
+    #public $loc_td = 0;
+    #public $call_td = 1;
+    #public $status_td = 2;
     
     public $cover_userid = "";
     public $cover_pass = "";
