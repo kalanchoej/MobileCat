@@ -322,11 +322,11 @@ class IIIParse {
 
             # First two columns show the physical location and the call number
             # in an <a> tag.
-            $loc['location'] = ptext($tds["0"]);
-            $loc['call']     = ptext($tds[$call_td]);
+            $loc['location'] = ptext($tds[$this->loc_td]);
+            $loc['call']     = ptext($tds[$this->call_td]);
 
             # Third column shows availability status. Remove superfluous nbsp;
-            $loc['status']   = strtolower(ptext($tds[$status_td]));
+            $loc['status']   = strtolower(ptext($tds[$this->status_td]));
 
             if (in_array($loc['status'], $this->available_status)) {
                 $loc['available'] = true;
@@ -738,7 +738,7 @@ class IIIParse {
         }
 
         # Book locations (if available)
-        $locs = $this->find_locs($html, $loc_td, $call_td, $status_td);
+        $locs = $this->find_locs($html);
 
         # Links to click on (if available)
         $links  = $this->find_links($html);
