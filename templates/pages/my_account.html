@@ -19,7 +19,7 @@
                     </td>
 
                     <td valign="middle" width="100%">
-                        <span class="title">{$i.title}</span><br>
+                        <span class="title">{$i.title|escape:'htmlall'}</span><br>
                         <span {if $i.overdue}class="attn"{/if}>{$i.status}</span>
                     </td>
                 </tr>
@@ -48,7 +48,7 @@
                     </td>
 
                     <td valign="middle" width="100%">
-                        <span class="title">{$h.title}</span><br /><br />
+                        <span class="title">{$h.title|escape:'htmlall'}</span><br /><br />
                         <span><em>{$h.status}</em>{if $h.available} (pickup at {$h.pickup}){/if}</span>
                     </td>
                 </tr>

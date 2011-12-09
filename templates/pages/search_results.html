@@ -15,16 +15,16 @@
             <img class="cov_im" src="{$res.cover_image}">
           </td>
           <td class="wide_cell">
-            <span class="title">{$res.title}</span>
-            {if $res.author}<br /><span class="author_pub">{$res.author}</span>{/if}
-            {if $res.media}<br /><b>{$res.media}</b>{/if}
+            <span class="title">{$res.title|escape:'htmlall'}</span>
+            {if $res.author}<br /><span class="author_pub">{$res.author|escape:'htmlall'}</span>{/if}
+            {if $res.media}<br /><b>{$res.media|escape:'htmlall'}</b>{/if}
             {foreach from=$res.extra item=extra}
-              {$extra}
+              {$extra|escape:'htmlall'}
             {/foreach} 
 
-            {if $res.location}<br /><span class="location"><em>{$res.location}</em></span>{/if}
+            {if $res.location}<br /><span class="location"><em>{$res.location|escape:'htmlall'}</em></span>{/if}
             {if $res.callno}<br /><br /><span style='font-weight: bold;'>{$res.callno}</span>{/if}
-              {if $res.status}  <span class="status">{$res.status}</span>{/if}
+              {if $res.status}  <span class="status">{$res.status|escape:'htmlall'}</span>{/if}
               {if $res.isbn}<span class="isbn hide" id="{$res.isbn}">{$res.isbn}</span>{/if}
           </td>
         </tr>
