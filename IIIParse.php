@@ -482,8 +482,8 @@ class IIIParse {
         return $items;
     }
 
-    public function get_request_form($name, $code, $request_url) {
-        $login_resp = $this->login($name, $code);
+    public function get_request_form($name, $code, $pin = NULL, $request_url) {
+        $login_resp = $this->login($name, $code, $pin);
 
         $resp = http_parse_message(http_get(
             $this->catalog_url . $request_url, array("cookies" => $login_resp['cookies'])
@@ -508,8 +508,8 @@ class IIIParse {
     }
 
     // MOBIUS BEGIN
-    public function get_needby_month($name, $code, $request_url) {
-      $login_resp = $this->login($name, $code);
+    public function get_needby_month($name, $code, $pin = NULL, $request_url) {
+      $login_resp = $this->login($name, $code, $pin);
 
       $resp = http_parse_message(http_get(
           $this->catalog_url . $request_url, array("cookies" => $login_resp['cookies'])
@@ -533,8 +533,8 @@ class IIIParse {
       return $nbMonth;
     }
     
-    public function get_needby_day($name, $code, $request_url) {
-      $login_resp = $this->login($name, $code);
+    public function get_needby_day($name, $code, $pin = NULL, $request_url) {
+      $login_resp = $this->login($name, $code, $pin);
 
       $resp = http_parse_message(http_get(
           $this->catalog_url . $request_url, array("cookies" => $login_resp['cookies'])
@@ -558,8 +558,8 @@ class IIIParse {
       return $nbDay;
     }
     
-    public function get_needby_year($name, $code, $request_url) {
-      $login_resp = $this->login($name, $code);
+    public function get_needby_year($name, $code, $pin = NULL, $request_url) {
+      $login_resp = $this->login($name, $code, $pin);
 
       $resp = http_parse_message(http_get(
           $this->catalog_url . $request_url, array("cookies" => $login_resp['cookies'])
@@ -585,8 +585,8 @@ class IIIParse {
 
     // MOBIUS END
 
-    public function send_item_request($name, $code, $request_url, $formdata) {
-        $login_resp = $this->login($name, $code);
+    public function send_item_request($name, $code, $pin = NULL, $request_url, $formdata) {
+        $login_resp = $this->login($name, $code, $pin);
 
     }
 
@@ -618,8 +618,8 @@ class IIIParse {
     }
 
 
-    public function get_my_account_info($name, $code, $userid, $url=null) {
-        $login_resp = $this->login($name, $code);
+    public function get_my_account_info($name, $code, $pin = NULL, $userid, $url=null) {
+        $login_resp = $this->login($name, $code, $pin);
 
         # If renewing items, this url will be non-null
         if ($url) {
@@ -835,8 +835,8 @@ class IIIParse {
         return $locs;
     }
 
-    public function get_request_loc($name, $code, $ref, $post_params) {
-        $login_resp = $this->login($name, $code);
+    public function get_request_loc($name, $code, $pin = NULL, $ref, $post_params) {
+        $login_resp = $this->login($name, $code, $pin);
         
         # We want to both submit to and use this URL as the referrer
         $url = $this->catalog_url . $ref;
@@ -863,8 +863,8 @@ class IIIParse {
         return $resp;
     }
 
-    public function submit_item_request($name, $code, $ref, $post_params) {
-        $login_resp = $this->login($name, $code);
+    public function submit_item_request($name, $code, $pin, $ref, $post_params) {
+        $login_resp = $this->login($name, $code, $pin);
 
         # We want to both submit to and use this URL as the referrer
         $url = $this->catalog_url . $ref;

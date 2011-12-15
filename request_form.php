@@ -20,10 +20,10 @@
             $bib  = ar_get('bibid', $_REQUEST);
             $rurl = ar_get('url', $_REQUEST);
        
-            $loc_options = $p->get_request_form($_SESSION['name'], $_SESSION['code'], $rurl);
-            $nbMonth = $p->get_needby_month($_SESSION['name'], $_SESSION['code'], $rurl);
-            $nbDay = $p->get_needby_day($_SESSION['name'], $_SESSION['code'], $rurl);
-            $nbYear = $p->get_needby_year($_SESSION['name'], $_SESSION['code'], $rurl);
+            $loc_options = $p->get_request_form($_SESSION['name'], $_SESSION['code'], $_SESSION['pin'], $rurl);
+            $nbMonth = $p->get_needby_month($_SESSION['name'], $_SESSION['code'], $_SESSION['pin'], $rurl);
+            $nbDay = $p->get_needby_day($_SESSION['name'], $_SESSION['code'], $_SESSION['pin'], $rurl);
+            $nbYear = $p->get_needby_year($_SESSION['name'], $_SESSION['code'], $_SESSION['pin'], $rurl);
             
             # if only one request location, skip step1?
             if(!$loc_options) $loc_options = array("Library pickup?");

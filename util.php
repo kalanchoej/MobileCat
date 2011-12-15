@@ -40,7 +40,7 @@ function get_smarty() {
     # User login info
     $smarty->assign('saved_name', ar_get('name', $_SESSION));
     $smarty->assign('saved_code', ar_get('code', $_SESSION));
-    $smarty->assign('saved_pin', ar_get('code', $_SESSION));
+    $smarty->assign('saved_pin', ar_get('pin', $_SESSION));
     $smarty->assign('saved_userid', ar_get('userid', $_SESSION));
 
     $smarty->assign('js', use_js());

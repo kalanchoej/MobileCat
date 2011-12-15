@@ -12,15 +12,16 @@
             $sm->assign("bibid", ar_get('bibid', $_REQUEST));
             $name = $_SESSION['name'];
             $code = $_SESSION['code'];
+	    $pin = $_SESSION['pin'];
 
             $url = ar_get('request_url', $_REQUEST);
 
             $post_params = array();
-            foreach (array('radio', 'locx00', 'inst', 'submit', 'submit.x', 'submit.y', 'name', 'code', 'needby_Month', 'needby_Day', 'needby_Year') as $key) {
+            foreach (array('radio', 'locx00', 'inst', 'submit', 'submit.x', 'submit.y', 'name', 'code', 'pin', 'needby_Month', 'needby_Day', 'needby_Year') as $key) {
                 $post_params[$key] = ar_get($key, $_REQUEST);
             }
 
-            if ($p->submit_item_request($name, $code, $url, $post_params)) {
+            if ($p->submit_item_request($name, $code, $pin, $url, $post_params)) {
                 $sm->display("responses/request_success.html");
             }
         }

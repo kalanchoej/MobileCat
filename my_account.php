@@ -14,7 +14,7 @@
             
         } else {
             $url = ar_get('url', $_REQUEST);
-            list($items, $holds, $fines) = $p->get_my_account_info($_SESSION['name'], $_SESSION['code'], $_SESSION['userid'], $url);
+            list($items, $holds, $fines) = $p->get_my_account_info($_SESSION['name'], $_SESSION['code'], $_SESSION['pin'], $_SESSION['userid'], $url);
 
             header("Content-Type: text/html; charset=utf-8");
             $sm->assign("items", $items);

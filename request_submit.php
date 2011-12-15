@@ -21,11 +21,12 @@
 
             $name = $_SESSION['name'];
             $code = $_SESSION['code'];
+	    $pin = $_SESSION['pin'];
 	    
-	    if ($p->submit_item_request($name, $code, $req_url, $post_params)) {
+	    if ($p->submit_item_request($name, $code, $pin, $req_url, $post_params)) {
                 $sm->display("responses/request_success.html");
             } else {	
-            	$resp = $p->get_request_loc($name, $code, $req_url, $post_params);
+            	$resp = $p->get_request_loc($name, $code, $pin, $req_url, $post_params);
            	$sm->assign("url", $req_url);
             	$sm->assign("locs", $resp["locs"]);
             	$sm->assign("hidden", $resp["hidden"]);
