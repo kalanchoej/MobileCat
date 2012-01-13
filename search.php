@@ -5,7 +5,7 @@
    
     try {
         $sm->assign("jsfiles", array("static/search.js"));
-        $sm->assign("searcharg", $_REQUEST['searcharg']);
+	if(isset($_REQUEST['searcharg'])) $sm->assign("searcharg", $_REQUEST['searcharg']);
         if(isset($_REQUEST['scope'])) $sm->assign("scope", $_REQUEST['scope']);
 
         if (blank_search()) {
