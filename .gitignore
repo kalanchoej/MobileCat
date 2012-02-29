@@ -4,3 +4,4 @@ templates_c/*
 *.rej
 *.patch
 statscollector.html.example
+static/apple-touch-icon.png
